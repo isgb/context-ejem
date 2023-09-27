@@ -21,6 +21,7 @@ const Componente = () =>{
     return(
         <div>
             <label>{valor.toString()}</label>
+            <button onClick={toggle}>Toggle</button>
         </div>
     )
 }

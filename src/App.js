@@ -1,37 +1,47 @@
-import { createContext,useContext,useState } from "react";
+import { Component, createContext, useContext } from "react";
 
-const Context = createContext({valor: false, toggle: () => {}})
+const Context1 = createContext('mi valor 1')
+const Context2 = createContext('mi valor 2')
 
 const Provider = ({ children }) => {
-    const [valor, setValor] = useState(false)
-    const value = {
-        valor,
-        toggle: () => setValor(!valor)
-    }
     return(
-        <Context.Provider value={value}>
+       <Context1.Provider value="valor 1">  
+         <Context2.Provider value="valor 2">
             {children}
-        </Context.Provider>
+         </Context2.Provider>
+       </Context1.Provider>
     )
 }
 
-const Componente = () =>{
-    const {valor, toggle} = useContext(Context)
+class Componente extends Component{
+    render(){
+        return(
+            <Context1.Consumer>
+                {
+                    valor1 => 
+                     <Context2.Consumer>
+                        {valor2 => <div>{`${valor1} ${valor2}`}</div>}
+                     </Context2.Consumer>
+                }
+            </Context1.Consumer>
+        )
+    }
+}
+
+const Component2 = () => {
+    const valor1 = useContext(Context1)
+    const valor2 = useContext(Context2)
 
     return(
-        <div>
-            <label>{valor.toString()}</label>
-            <button onClick={toggle}>Toggle</button>
-        </div>
+        <div>{`${valor1} ${valor2}`}</div>
     )
 }
 
-const App = () =>{
+const App = () => {
     return(
         <Provider>
             <Componente/>
+            <Component2/>
         </Provider>
     )
 }
-
-export default App;
